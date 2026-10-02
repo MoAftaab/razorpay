@@ -6,6 +6,71 @@ This project exposes a small, stable JSON API over the publicly visible F-Droid 
 
 The adapter is intentionally read-only. It does not log in, access user data, download APKs, or call private/internal endpoints.
 
+## Quick Start
+
+### Windows PowerShell
+
+From the repository root:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+The API will be available at `http://localhost:8000`.
+
+Verify it from another PowerShell window:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/health
+Invoke-RestMethod "http://localhost:8000/search?query=notes" | ConvertTo-Json -Depth 5
+Invoke-RestMethod "http://localhost:8000/items/org.fdroid.fdroid" | ConvertTo-Json -Depth 5
+```
+
+Open interactive API documentation at [`http://localhost:8000/docs`](http://localhost:8000/docs).
+
+### macOS/Linux
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+Verify it with:
+
+```bash
+curl http://localhost:8000/health
+curl "http://localhost:8000/search?query=notes"
+curl http://localhost:8000/items/org.fdroid.fdroid
+```
+
+### Docker
+
+```bash
+docker build -t fdroid-catalog-adapter .
+docker run --rm -p 8000:8000 fdroid-catalog-adapter
+```
+
+Then open [`http://localhost:8000/docs`](http://localhost:8000/docs) or run the health check above.
+
+### Run the tests
+
+```bash
+python -m pytest -q
+```
+
+Expected result:
+
+```text
+13 passed
+```
+
 ### What this project is—and is not
 
 F-Droid is the upstream website. This repository contains our API, not an official F-Droid API. The application makes carefully bounded requests to public F-Droid HTML pages and converts the returned page content into our own JSON contract.
