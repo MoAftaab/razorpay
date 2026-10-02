@@ -71,6 +71,28 @@ Expected result:
 13 passed
 ```
 
+### Troubleshooting: port `8000` already in use
+
+Port `8000` may already be occupied by another local application. If opening `http://localhost:8000/docs` shows a different API, stop that service if it belongs to you, or run this project on another port:
+
+```powershell
+uvicorn app.main:app --host 127.0.0.1 --port 8001
+```
+
+Then open:
+
+```text
+http://localhost:8001/docs
+```
+
+For Docker, keep port `8000` inside the container and use another host port:
+
+```bash
+docker run --rm -p 8001:8000 fdroid-catalog-adapter
+```
+
+The API will then be available at `http://localhost:8001/docs`.
+
 ### What this project is—and is not
 
 F-Droid is the upstream website. This repository contains our API, not an official F-Droid API. The application makes carefully bounded requests to public F-Droid HTML pages and converts the returned page content into our own JSON contract.
