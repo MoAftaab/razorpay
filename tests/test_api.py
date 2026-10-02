@@ -113,6 +113,16 @@ def test_upstream_timeout() -> None:
     assert response.json()["detail"]["code"] == "upstream_timeout"
 
 
+def test_upstream_network_failure() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("connection failed", request=request)
+
+    with client_for(handler) as client:
+        response = client.get("/search?query=notes")
+    assert response.status_code == 502
+    assert response.json()["detail"]["code"] == "upstream_unavailable"
+
+
 def test_malformed_upstream_response() -> None:
     with client_for(lambda request: httpx.Response(200, text="<html><body>no package here</body></html>")) as client:
         response = client.get("/items/com.example.notes")

@@ -68,7 +68,7 @@ python -m pytest -q
 Expected result:
 
 ```text
-13 passed
+14 passed
 ```
 
 ### Troubleshooting: port `8000` already in use
@@ -410,7 +410,7 @@ curl http://localhost:8000/items/org.fdroid.fdroid
 pytest -q
 ```
 
-The suite mocks all upstream HTTP calls and covers health, successful search, successful item lookup, response shape, invalid input, missing items, upstream 4xx/5xx, timeouts, and malformed HTML.
+The suite mocks all upstream HTTP calls and covers health, successful search, successful item lookup, response shape, invalid input, missing items, upstream 4xx/5xx, network failures, timeouts, and malformed HTML.
 
 The test suite is intentionally independent from the live website. The live smoke check is useful for confirming that the current page structure still matches the parser, but it is not part of the automated tests because external websites can be temporarily unavailable.
 
